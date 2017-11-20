@@ -28,21 +28,21 @@
     // edit these to reflect your particular situation
     //
     $locale = 'en_US.UTF-8';
-    $language = 'nl';
+    $language = 'en';
 
     // Set local timezone
-    date_default_timezone_set("Europe/Amsterdam");
+    date_default_timezone_set("America/Chicago");
 
     // list of network interfaces monitored by vnStat
-    $iface_list = array('eth0', 'sixxs');
+    $iface_list = array('eth0','switch0');
 
     //
     // optional names for interfaces
     // if there's no name set for an interface then the interface identifier
     // will be displayed instead
     //
-    $iface_title['eth0'] = 'Internal';
-    $iface_title['sixxs'] = 'SixXS IPv6';
+    $iface_title['eth0'] = 'WAN';
+    $iface_title['switch0'] = 'LAN';
 
     //
     // There are two possible sources for vnstat data. If the $vnstat_bin
@@ -74,7 +74,7 @@
     define('SVG_FONT', 'Verdana');
 
     // Default theme
-    define('DEFAULT_COLORSCHEME', 'light');
+    define('DEFAULT_COLORSCHEME', 'dark');
     
     // SVG Depth scaling factor
     define('SVG_DEPTH_SCALING', 1);

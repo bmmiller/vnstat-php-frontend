@@ -139,6 +139,11 @@
         print "<th class=\"label\">".T('In')."</th>";
         print "<th class=\"label\">".T('Out')."</th>";
         print "<th class=\"label\">".T('Total')."</th>";
+		($caption == 'Last 12 months')
+        {
+                print "<th class=\"label\" style=\"width: 16.6%\">".T('Bandwidth Limit')."</th>";
+                print "<th class=\"label\" style=\"width: 16.6%\">".T('Utilization Rate')."</th>";
+        }
         print "</tr>\n";
 
         for ($i=0; $i<count($tab); $i++)
@@ -149,16 +154,45 @@
                 $rx = kbytes_to_string($tab[$i]['rx']);
                 $tx = kbytes_to_string($tab[$i]['tx']);
                 $total = kbytes_to_string($tab[$i]['rx']+$tab[$i]['tx']);
+				$limit = number_format($total / 1024 * 100, 2);
+                $monthrate = get_num_days_month($t);
+                $font_color = ($limit < $monthrate) ? '#08BB08' : 'red';
                 $id = ($i & 1) ? 'odd' : 'even';
                 print "<tr>";
                 print "<td class=\"label_$id\">$t</td>";
                 print "<td class=\"numeric_$id\">$rx</td>";
                 print "<td class=\"numeric_$id\">$tx</td>";
                 print "<td class=\"numeric_$id\">$total</td>";
+				if ($caption == 'Last 12 months')
+                {
+                	print "<td class=\"numeric_$id\">$limit %</td>";
+                	print "<td class=\"numeric_$id\" style=\"color: $font_color\">$monthrate %</td>";
+                }
                 print "</tr>\n";
              }
         }
         print "</table>\n";
+    }
+    function get_num_days_month($t)
+    {
+    	$curr_day = getdate()[mday];
+    	$curr_month = getdate()[mon];
+   	
+    	if (strpos($t,'January') !== FALSE && $curr_month == 1) { $max_days = 31; }
+    	elseif (strpos($t,'February') !== FALSE && $curr_month == 2) { $max_days = 28; }
+    	elseif (strpos($t,'March') !== FALSE && $curr_month == 3) { $max_days = 31; }
+    	elseif (strpos($t,'April') !== FALSE && $curr_month == 4) { $max_days = 30; }
+    	elseif (strpos($t,'May') !== FALSE && $curr_month == 5) { $max_days = 31; }
+    	elseif (strpos($t,'June') !== FALSE && $curr_month == 6) { $max_days = 30; }
+    	elseif (strpos($t,'July') !== FALSE && $curr_month == 7) { $max_days = 31; }
+    	elseif (strpos($t,'August') !== FALSE && $curr_month == 8) { $max_days = 31; }
+    	elseif (strpos($t,'September') !== FALSE && $curr_month == 9) { $max_days = 30; }
+    	elseif (strpos($t,'October') !== FALSE && $curr_month == 10) { $max_days = 31; }
+    	elseif (strpos($t,'November') !== FALSE && $curr_month == 11) { $max_days = 30; }
+    	elseif (strpos($t,'December') !== FALSE && $curr_month == 12) { $max_days = 31; }
+    	else return 100;
+    		
+		return number_format($curr_day / $max_days * 100, 2);    		
     }
 
     get_vnstat_data();
